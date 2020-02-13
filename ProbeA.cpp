@@ -5,14 +5,13 @@
     2. Awaits for DataHub Signal before being able to send another message (mtype for DataHub -> 35)
     3. mtype values for B: 192 and C: 193, so this means whenever we are recieving we will know that mtypes of 192 will be from B and 193 will be from C
     4. mtype to send to the Hub Directly: 1. We strictly use these to either get acknowledge or get terminated. (Messages to send to the hub directly)
-    5
 */
 
 
 using namespace std;
 
 int main(){
-    //Random
+    //Used to Generate Random Numbers
     srand(time(NULL));
 
     //magic_seed alpha
@@ -31,8 +30,8 @@ int main(){
 	//Generating Message Object
 	message_buf msg;
 
-	//Acknowledge Variable
-	bool isAcknowledge = true;
+	//Probe B Terminate Variable (Counts the # of Messages Sent
+	int message_count = 0;
 
 	//Probe A Starts off Running
 	bool isRunning = true;
@@ -48,15 +47,16 @@ int main(){
 
             //Send Signal to Message Queue of Probe A Termination
             msg.mtype = 1;
-            strncpy(msg.greeting, "EXIT");
+            strncpy(msg.greeting, "A_EXIT");                         //When this message is sent, we will look through message in DataHub for this String to Close A
             msgsnd(qid, (struct msgbuf*)msg, greetingSize, 0);
 
             //Probe A Shuts Down
             isRunning = false;
+            break;                                                   //Break from the While Loop if Probe A Terminates
         }
 
         //Valid Reading
-        else if(randomNum % magic_seed_alpha == 0 && isAcknowledge){ //Valid Reads Occur when the Random Number is Divisible by Probe's Magic Seed
+        else if(randomNum % magic_seed_alpha == 0 && isAcknowledge){ //Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
             //Generate and store mtype of either 192 or 193
             int chooseOne = (rand() > RAND_MAX/2) ? 192:193;
             msg.mtype = chooseOne;
@@ -75,20 +75,19 @@ int main(){
 
         }
 
-        //Waiting for Acknowledgement from DataHub (mtype messages received from DataHub will be 35)
+        //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 35)
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 35, 0);
 
         //Display to Console that Probe A Message has been acknowledge
         cout << getpid() << " : Received Acknowledge from Data Hub" << endl;
         isAcknowledge = true;
 
-        //(Experimental) Probe A Reads Messages Sent From either Probe B(103) or C(45)
-        int chooseOne = (rand() > RAND_MAX/2) ? 103:45;
+        //(Experimental) Probe A Reads Messages Sent From either Probe B(192) or C(93)
+        int chooseOne = (rand() > RAND_MAX/2) ? 192:93;
         msgrcv(qid, (struct msgbuf *)&msg, greetingSize, chooseOne, 0)
 
         //(Debug) Outputs that Probe has Received a Message
         cout << getpid() << " : Received Message" << endl;
-
 
 	}
 

@@ -7,12 +7,12 @@ using namespace std;
     Note: Kill_Patch is provided by the Professor
 
     2. mtype value for A: 45, B:93
-    3. mtype value for DataHub: 01, We strictly use these to either get acknowledge or get terminated
+    3. mtype value for DataHub: 03, to let the DataHub know ProbeC is terminated
 */
 
 int main(){
     //magic_seed rho
-    const int rho = 251;
+    const int magic_seed_rho = 251;
 
     //Gets the Queue ID that is currently on, if not then it returns a -1
     int qid = msgget(ftok(".",'u'), 0);
