@@ -42,7 +42,7 @@ int main(){
         int randomNum = rand();
 
         //Terminate Condition
-        if(message_count >= 10000){
+        if((message_count + A_Messages.getTotalMessageSent() + C_Messages.getTotalMessageSent()) >= 10000){
             //Display Probe B Termination
             cout << "Probe B Termination Condition Met: " << message_count << endl;
             cout << "Probe B is Now Exiting" << endl;
@@ -64,13 +64,13 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greeting, "Hi " + to_string(chooseOne));     //Sends "Hi 102/103"
+            strncpy(msg.greeting, "(Probe B: Hi " + to_string(chooseOne));     //Sends "Hi 102/103"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
 
             //(Debug) Outputs that Probe A has Sent a Message
-            cout << getpid() << " : Sent Message" << endl;
+            cout << getpid() << "(Probe B) : Sent Message" << endl;
 
             //Increment Message_Count
             ++messageCount;

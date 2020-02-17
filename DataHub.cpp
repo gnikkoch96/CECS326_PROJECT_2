@@ -15,23 +15,25 @@ int main()
 	// create my msgQ with key value from ftok()
 	int qid = msgget(ftok(".",'u'), IPC_EXCL|IPC_CREAT|0600);
 
-	//Message Struct
-	int greetingSize = 50;
-	typedef struct msg{
+	//Message Struct	
+	struct msgbuf{
         long mtype;
-        char greetings[greetingSize];
-	}message_buf;
+        char greetings[50];
+	};
 
 	//Generating message object
-	message_buf msg;
+	msgbuf msg;
 
 	//Queue is Terminated after all Probes Exit the Queue
-	bool isARunning = true, isBRunning = true;, isCrunning = true;          	                //Question: Is it right to assume all Probe are running correctly?
+	bool isARunning = true, isBRunning = true, isCrunning = true;          	               		//Question: Is it right to assume all Probe are running correctly?
 	bool isRunning = isARunning || isBRunning|| isCRunning;                                     //The Data Hub is Running as long as one Probe is still running
 
 	while(isRunning){
         //Always Running Until all Probes Terminate
 
+		//Size of Greeting
+		int greetingSize = sizeof(msg) - sizeof(long);
+		
         //Check Termination of Probe A
         //Receive Message to Check for Termination
         if(msgrcv(qid, (struct msgbuf*)msg, greetingSize, 1, 0) != -1){

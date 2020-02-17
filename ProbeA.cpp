@@ -23,7 +23,7 @@ class A_Messages{
 
 using namespace std;
 
-int main(){WW
+int main(){
     //Used to Generate Random Numbers
     srand(time(NULL));
 
@@ -34,20 +34,19 @@ int main(){WW
     int qid = msgget(ftok(".",'u'), 0);
 
     // Declaring Message Buffer
-    int greetingSize = 50;                                          //Size of Message String
 	typdef struct buf {
 		long mtype; // required
 		char greeting[greetingSize];                                // mesg content
 	}message_buf;
 
+	//Size of Greeting
+	int greetingSize = sizeof(msg) - sizeof(long);
+	
 	//Generating Message Object
 	message_buf msg;
 
 	//Used to Determine if Probe A has been Acknowledge by the DataHub
     bool isAcknowledge = true;
-
-
-    //Counting Messages
 
 	//Probe A Starts off Running
 	bool isRunning = true;
@@ -78,16 +77,19 @@ int main(){WW
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greeting, "Hi " + to_string(chooseOne));     //Sends "Hi 192/193"
+            strncpy(msg.greeting, "Probe A: Hi " + to_string(chooseOne));     //Sends "Hi 192/193"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
 
             //(Debug) Outputs that Probe A has Sent a Message
-            cout << getpid() << " : Sent Message" << endl;
+            cout << getpid() << "Probe A: Sent Message" << endl;
 
             //Change isAcknowledge to False to Wait for Signal, to be able to send another message
             isAcknowledge = false;
+            
+            //Count the Messages Being sent from Probe A to DataHub
+            A_Message.message_count++;
 
         }
 
@@ -95,7 +97,7 @@ int main(){WW
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 35, 0);
 
         //Display to Console that Probe A Message has been acknowledge
-        cout << getpid() << " : Received Acknowledgment from Data Hub" << endl;
+        cout << getpid() << "Probe A: Received Acknowledgment from Data Hub" << endl;
         isAcknowledge = true;
 
         //(Experimental) Probe A Reads Messages Sent From either Probe B(192) or C(93)
