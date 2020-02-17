@@ -42,7 +42,7 @@ int main(){
         int randomNum = rand();
 
         //Terminate Condition
-        if(message_count > 10000){
+        if(message_count >= 10000){
             //Display Probe B Termination
             cout << "Probe B Termination Condition Met: " << message_count << endl;
             cout << "Probe B is Now Exiting" << endl;
@@ -58,7 +58,7 @@ int main(){
         }
 
         //Valid Reading
-        else if(randomNum % magic_seed_alpha == 0){                 //Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
+        else if(randomNum % magic_seed_beta == 0){                   //Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
             //Generate and store mtype of either 102 or 103
             int chooseOne = (rand() > RAND_MAX/2) ? 102:103;
             msg.mtype = chooseOne;

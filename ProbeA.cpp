@@ -7,10 +7,23 @@
     4. mtype to send to the Hub Directly: 1. We strictly use these to either get acknowledge or get terminated. (Messages to send to the hub directly)
 */
 
+class A_Messages{
+    //This class will be used to calculate the # of messages sent from Probe A
+    //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
+
+    public:
+        static int getTotalMessageSent(){
+            return message_count;
+        }
+    private:
+       	//Probe B Terminate Variable (Counts the # of Messages Sent
+        static int message_count = 0;
+
+};
 
 using namespace std;
 
-int main(){
+int main(){WW
     //Used to Generate Random Numbers
     srand(time(NULL));
 
@@ -30,8 +43,11 @@ int main(){
 	//Generating Message Object
 	message_buf msg;
 
-	//Probe B Terminate Variable (Counts the # of Messages Sent
-	int message_count = 0;
+	//Used to Determine if Probe A has been Acknowledge by the DataHub
+    bool isAcknowledge = true;
+
+
+    //Counting Messages
 
 	//Probe A Starts off Running
 	bool isRunning = true;
@@ -79,7 +95,7 @@ int main(){
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 35, 0);
 
         //Display to Console that Probe A Message has been acknowledge
-        cout << getpid() << " : Received Acknowledge from Data Hub" << endl;
+        cout << getpid() << " : Received Acknowledgment from Data Hub" << endl;
         isAcknowledge = true;
 
         //(Experimental) Probe A Reads Messages Sent From either Probe B(192) or C(93)

@@ -55,6 +55,8 @@ int main()
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe B Disconnected" << endl;
 
+            //Put Force_Patch
+
             //Probe B Stops Running
             isBRunning = false;
         }
