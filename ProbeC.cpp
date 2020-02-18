@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <cstdlib>
+#include <string>
 #include "kill_patch.h"
 
 using namespace std;
@@ -28,7 +29,7 @@ class C_Messages{
         }
     private:
        	//Probe B Terminate Variable (Counts the # of Messages Sent
-        static int message_count = 0;
+        static int message_count;
 
 };
 
@@ -46,11 +47,15 @@ int main(){
     // Declaring Message Buffer
 	struct msgO {
 		long mtype; // required
-		char greeting[50];                                // mesg content
+		char greetings[50];                                // mesg content
 	};
 
 	//Generating Message Object
 	msgO msg;
+
+    //Initializing C_Message Message_Count
+	C_Messages.message_count = 0;
+
 
 	//Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);

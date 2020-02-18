@@ -52,7 +52,7 @@ int main()
             isARunning = false;
         }else if (msg.mtype = 35){                                                              //The only message with mtype = 35 is an acknowledgment to Probe A
             msg.mtype = 35;
-            strncpy(msg.greeting, "DATAHUB: PROBE A ACKNOWLEDGED", greetingSize);               //Sends "ACKNOWLEDGED" to Probe A
+            strncpy(msg.greetings, "DATAHUB: PROBE A ACKNOWLEDGED", greetingSize);               //Sends "ACKNOWLEDGED" to Probe A
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //(Debug) Display that DataHub Acknowledged Probe A

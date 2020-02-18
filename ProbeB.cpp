@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <cstdlib>
+#include <string>
 
 using namespace std;
 
@@ -32,7 +33,7 @@ int main(){
     // Declaring Message Buffer
 	struct msgO {
 		long mtype; // required
-		char greeting[50];                                // mesg content
+		char greetings[50];                                // mesg content
 	};
 
 	//Generating Message Object
@@ -82,7 +83,7 @@ int main(){
             cout << getpid() << "(Probe B) : Sent Message" << endl;
 
             //Increment Message_Count
-            ++messageCount;
+            ++message_count;
         }
 
 

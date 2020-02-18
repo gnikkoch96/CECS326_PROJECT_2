@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <cstdlib>
+#include <string>
 
 using namespace std;
 
@@ -26,7 +27,7 @@ class A_Messages{
         }
     private:
        	//Probe B Terminate Variable (Counts the # of Messages Sent
-        static int message_count = 0;
+        static int message_count;
 
 };
 
@@ -45,11 +46,14 @@ int main(){
     // Declaring Message Buffer
 	struct msgO {
 		long mtype; // required
-		char greeting[50];                                // mesg content
+		char greetings[50];                                // mesg content
 	};
 
 	//Generating Message Object
 	msgO msg;
+
+	//Initializing A_Message Message_Count
+	A_Messages.message_count = 0;
 
 	//Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);
@@ -98,7 +102,7 @@ int main(){
             isAcknowledge = false;
 
             //Count the Messages Being sent from Probe A to DataHub
-            A_Message.message_count++;
+            A_Messages.message_count++;
 
         }
 
