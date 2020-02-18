@@ -22,13 +22,8 @@ class A_Messages{
     //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
 
     public:
-        static int getTotalMessageSent(){
-            return message_count;
-        }
-    private:
        	//Probe B Terminate Variable (Counts the # of Messages Sent
         static int message_count;
-
 };
 
 
@@ -53,7 +48,8 @@ int main(){
 	msgO msg;
 
 	//Initializing A_Message Message_Count
-	A_Messages.message_count = 0;
+	A_Messages aObj;
+	aObj.message_count = 0;
 
 	//Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);
@@ -90,7 +86,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe A: Hi " + to_string(chooseOne, greetingSize));     //Sends "Hi 192/193"
+            strncpy(msg.greetings, "Probe A: Hi " + to_string(chooseOne));     //Sends "Hi 192/193"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
@@ -102,7 +98,7 @@ int main(){
             isAcknowledge = false;
 
             //Count the Messages Being sent from Probe A to DataHub
-            A_Messages.message_count++;
+            aObj.message_count++;
 
         }
 

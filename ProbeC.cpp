@@ -24,13 +24,8 @@ class C_Messages{
     //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
 
     public:
-        static int getTotalMessageSent(){
-            return message_count;
-        }
-    private:
        	//Probe B Terminate Variable (Counts the # of Messages Sent
         static int message_count;
-
 };
 
 int main(){
@@ -54,7 +49,8 @@ int main(){
 	msgO msg;
 
     //Initializing C_Message Message_Count
-	C_Messages.message_count = 0;
+	C_Messages cObj;
+	cObj.message_count = 0;
 
 
 	//Size of Greeting
@@ -87,7 +83,7 @@ int main(){
             cout << getpid() << "(Probe C): Sent Message" << endl;
 
             //Increment Message_Count
-            ++C_Messages.message_count;
+            ++cObj.message_count;
         }
 
 

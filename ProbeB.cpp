@@ -7,6 +7,8 @@
 #include <sys/wait.h>
 #include <cstdlib>
 #include <string>
+#include "ProbeA.cpp"
+#include "ProbeC.cpp"
 
 using namespace std;
 
