@@ -1,4 +1,11 @@
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <cstring>
 #include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -7,65 +14,60 @@ using namespace std;
     If the Queue receives any message with numbers mentioned previously, it is going to terminate their respective probe
 */
 
-//Checks the Message for a Specific Word - Used for Looking for EXIT Messages
-bool checkGreeting(char *greeting, char *word);                                                  //Returns (1) if Word Exists, (0) if Word doesn't exist
-
 int main()
 {
 	// create my msgQ with key value from ftok()
 	int qid = msgget(ftok(".",'u'), IPC_EXCL|IPC_CREAT|0600);
 
-	//Message Struct	
+	//Message Struct
 	struct msgbuf{
         long mtype;
         char greetings[50];
 	};
 
+    //Size of Greeting
+    int greetingSize = sizeof(msg) - sizeof(long);
+
 	//Generating message object
 	msgbuf msg;
 
 	//Queue is Terminated after all Probes Exit the Queue
-	bool isARunning = true, isBRunning = true, isCrunning = true;          	               		//Question: Is it right to assume all Probe are running correctly?
+	bool isARunning = true, isBRunning = true, isCrunning = true;
 	bool isRunning = isARunning || isBRunning|| isCRunning;                                     //The Data Hub is Running as long as one Probe is still running
 
 	while(isRunning){
         //Always Running Until all Probes Terminate
 
-		//Size of Greeting
-		int greetingSize = sizeof(msg) - sizeof(long);
-		
+        //DataHub Receives Top Message
+        msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 0, 0);
+
         //Check Termination of Probe A
-        //Receive Message to Check for Termination
-        if(msgrcv(qid, (struct msgbuf*)msg, greetingSize, 1, 0) != -1){
+        if(msg.mtype = 1){                                                                      //The only message with mtype = 1 is a termination message from Probe A
             //(Debug) Probe A Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe A Disconnected" << endl;
 
             //Probe A Stops Running
             isARunning = false;
-        }else{ //Probe A Acknowledgment
+        }else if (msg.mtype = 35){                                                              //The only message with mtype = 35 is an acknowledgment to Probe A
             msg.mtype = 35;
-            strncpy(msg.greeting, "ACKNOWLEDGED");                                               //Sends "ACKNOWLEDGED" to Probe A
-            msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
+            strncpy(msg.greeting, "DATAHUB: PROBE A ACKNOWLEDGED");                             //Sends "ACKNOWLEDGED" to Probe A
+            msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //(Debug) Display that DataHub Acknowledged Probe A
             cout << getpid() << " : Acknowledged Probe A's Message" << endl;
         }
 
         //Check Termination of Probe B
-        //Receive Message to Check for Termination
-        if(msgrcv(qid, (struct msgbuf*)msg, greetingSize, 2, 0) != -1){
+        if(msg.mtype = 2){                                                                      //The only message with mtype = 2 is a termination message from Probe B
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe B Disconnected" << endl;
-
-            //Put Force_Patch
 
             //Probe B Stops Running
             isBRunning = false;
         }
 
         //Terminate Probe C Conditions
-        //Receive Message to Check for Termination
-        if(msgrcv(qid, (struct msgbuf*)msg, greetingSize, 3, 0) != -1){
+        if(msg.mtype = 3){                                                                      //The only message with mtype = 3 is a termination message from Probe C
              //(Debug) Probe C Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe C Disconnected" << endl;
 
@@ -75,6 +77,8 @@ int main()
 	}
 
 	//Destroy Message Queue
+	//(IMPORTANT): Make sure that the Queue is Empty before deleting
+    msgctl (qid, IPC_RMID, NULL);
 
     return 0;
 }

@@ -1,4 +1,13 @@
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <cstring>
 #include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <cstdlib>
+
+using namespace std;
 
 /* Probe A:
     1. Terminates if Random Number Generated < 50
@@ -21,7 +30,7 @@ class A_Messages{
 
 };
 
-using namespace std;
+
 
 int main(){
     //Used to Generate Random Numbers
@@ -41,7 +50,7 @@ int main(){
 
 	//Size of Greeting
 	int greetingSize = sizeof(msg) - sizeof(long);
-	
+
 	//Generating Message Object
 	message_buf msg;
 
@@ -63,7 +72,7 @@ int main(){
             //Send Signal to Message Queue of Probe A Termination
             msg.mtype = 1;
             strncpy(msg.greeting, "A_EXIT");                         //When this message is sent, we will look through message in DataHub for this String to Close A
-            msgsnd(qid, (struct msgbuf*)msg, greetingSize, 0);
+            msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //Probe A Shuts Down
             isRunning = false;
@@ -80,14 +89,14 @@ int main(){
             strncpy(msg.greeting, "Probe A: Hi " + to_string(chooseOne));     //Sends "Hi 192/193"
 
             //Sending to Message Queue
-            msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
+            msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
 
             //(Debug) Outputs that Probe A has Sent a Message
             cout << getpid() << "Probe A: Sent Message" << endl;
 
             //Change isAcknowledge to False to Wait for Signal, to be able to send another message
             isAcknowledge = false;
-            
+
             //Count the Messages Being sent from Probe A to DataHub
             A_Message.message_count++;
 
@@ -99,13 +108,6 @@ int main(){
         //Display to Console that Probe A Message has been acknowledge
         cout << getpid() << "Probe A: Received Acknowledgment from Data Hub" << endl;
         isAcknowledge = true;
-
-        //(Experimental) Probe A Reads Messages Sent From either Probe B(192) or C(93)
-        int chooseOne = (rand() > RAND_MAX/2) ? 192:93;
-        msgrcv(qid, (struct msgbuf *)&msg, greetingSize, chooseOne, 0)
-
-        //(Debug) Outputs that Probe has Received a Message
-        cout << getpid() << " : Received Message" << endl;
 
 	}
 

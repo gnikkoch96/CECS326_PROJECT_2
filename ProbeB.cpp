@@ -1,4 +1,11 @@
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <cstring>
 #include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -23,11 +30,13 @@ int main(){
     int qid = msgget(ftok(".",'u'), 0);
 
     // Declaring Message Buffer
-    int greetingSize = 50;                                          //Size of Message String
 	typdef struct buf {
 		long mtype; // required
-		char greeting[greetingSize];                                // mesg content
+		char greeting[50];                                // mesg content
 	}message_buf;
+
+    //Size of Greeting
+	int greetingSize = sizeof(msg) - sizeof(long);
 
 	//Generating Message Object
 	message_buf msg;
@@ -50,7 +59,7 @@ int main(){
             //Send Signal to Message Queue of Probe A Termination
             msg.mtype = 2;
             strncpy(msg.greeting, "B_EXIT");                         //When this message is sent, we will look through message in DataHub for this String to Close B
-            msgsnd(qid, (struct msgbuf*)msg, greetingSize, 0);
+            msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //Probe B Shuts Down
             isRunning = false;
@@ -64,7 +73,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greeting, "(Probe B: Hi " + to_string(chooseOne));     //Sends "Hi 102/103"
+            strncpy(msg.greeting, "Probe B: Hi " + to_string(chooseOne));     //Sends "Hi 102/103"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
@@ -76,12 +85,6 @@ int main(){
             ++messageCount;
         }
 
-        //(Experimental) Probe B Reads Messages Sent From either Probe A(103) or C(45)
-        int chooseOne = (rand() > RAND_MAX/2) ? 103:45;
-        msgrcv(qid, (struct msgbuf *)&msg, greetingSize, chooseOne, 0)
-
-        //(Debug) Outputs that Probe has Received a Message
-        cout << getpid() << " : Received Message" << endl;
 
 	}
 

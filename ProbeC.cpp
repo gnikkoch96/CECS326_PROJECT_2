@@ -1,4 +1,11 @@
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <cstring>
 #include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <cstdlib>
 #include "kill_patch.h"
 
 using namespace std;
@@ -39,15 +46,15 @@ int main(){
     // Declaring Message Buffer
 	typdef struct buf {
 		long mtype; // required
-		char greeting[greetingSize];                                // mesg content
+		char greeting[50];                                // mesg content
 	}message_buf;
-	
+
 	//Generating Message Object
 	message_buf msg;
-	
+
 	//Size of Greeting
 	int greetingSize = sizeof(msg) - sizeof(long);
-	
+
 	//Kill Patch Inclusion
 	msg.mtype = 3;
 	strncpy(msg.greeting, "Probe C Exiting");
@@ -69,10 +76,10 @@ int main(){
             strncpy(msg.greeting, "Probe C: Hi " + to_string(chooseOne));     //Sends "Hi 45/93"
 
             //Sending to Message Queue
-            msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
+            msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //(Debug) Outputs that Probe C has Sent a Message
-            cout << getpid() << "Probe C: Sent Message" << endl;
+            cout << getpid() << "(Probe C): Sent Message" << endl;
 
             //Increment Message_Count
             ++C_Messages.message_count;
