@@ -46,14 +46,14 @@ int main(){
     // Declaring Message Buffer
 	struct msgO {
 		long mtype; // required
-		char greeting[greetingSize];                                // mesg content
+		char greeting[50];                                // mesg content
 	};
 
 	//Generating Message Object
 	msgO msg;
 
 	//Size of Greeting
-	int greetingSize = sizeof(msg) - sizeof(long);
+	int greetingSize = sizeof(msgO) - sizeof(long);
 
 	//Kill Patch Inclusion
 	msg.mtype = 3;
@@ -73,7 +73,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greeting, "Probe C: Hi " + to_string(chooseOne));     //Sends "Hi 45/93"
+            strncpy(msg.greetings, "Probe C: Hi " + to_string(chooseOne));     //Sends "Hi 45/93"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);

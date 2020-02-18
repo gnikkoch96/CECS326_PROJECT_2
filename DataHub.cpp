@@ -20,17 +20,17 @@ int main()
 	int qid = msgget(ftok(".",'u'), IPC_EXCL|IPC_CREAT|0600);
 
 	//Message Struct
-	struct msgbuf{
+	struct msgO{
         long mtype;
         char greetings[50];
 	};
 
 
 	//Generating message object
-	msgbuf msg;
+	msgO msg;
 
     //Size of Greeting
-    int greetingSize = sizeof(msgbuf) - sizeof(long);
+    int greetingSize = sizeof(msgO) - sizeof(long);
 
 
 	//Queue is Terminated after all Probes Exit the Queue

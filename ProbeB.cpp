@@ -32,14 +32,14 @@ int main(){
     // Declaring Message Buffer
 	struct msgO {
 		long mtype; // required
-		char greeting[greetingSize];                                // mesg content
+		char greeting[50];                                // mesg content
 	};
 
 	//Generating Message Object
 	msgO msg;
 
     //Size of Greeting
-	int greetingSize = sizeof(msg) - sizeof(long);
+	int greetingSize = sizeof(msgO) - sizeof(long);
 
     //Initialize Message Count - > Counts the # of Messages that is Sent to Message Queue (Used for testing Probe B Termination)
     int message_count = 0;
@@ -73,7 +73,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greeting, "Probe B: Hi " + to_string(chooseOne));     //Sends "Hi 102/103"
+            strncpy(msg.greetings, "Probe B: Hi " + to_string(chooseOne));     //Sends "Hi 102/103"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
