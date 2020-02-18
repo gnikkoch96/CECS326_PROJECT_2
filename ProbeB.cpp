@@ -30,16 +30,16 @@ int main(){
     int qid = msgget(ftok(".",'u'), 0);
 
     // Declaring Message Buffer
-	typdef struct buf {
+	struct msgO {
 		long mtype; // required
-		char greeting[50];                                // mesg content
-	}message_buf;
+		char greeting[greetingSize];                                // mesg content
+	};
+
+	//Generating Message Object
+	msgO msg;
 
     //Size of Greeting
 	int greetingSize = sizeof(msg) - sizeof(long);
-
-	//Generating Message Object
-	message_buf msg;
 
     //Initialize Message Count - > Counts the # of Messages that is Sent to Message Queue (Used for testing Probe B Termination)
     int message_count = 0;

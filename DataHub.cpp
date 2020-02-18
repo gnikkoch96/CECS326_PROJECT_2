@@ -25,14 +25,16 @@ int main()
         char greetings[50];
 	};
 
-    //Size of Greeting
-    int greetingSize = sizeof(msg) - sizeof(long);
 
 	//Generating message object
 	msgbuf msg;
 
+    //Size of Greeting
+    int greetingSize = sizeof(msgbuf) - sizeof(long);
+
+
 	//Queue is Terminated after all Probes Exit the Queue
-	bool isARunning = true, isBRunning = true, isCrunning = true;
+	bool isARunning = true, isBRunning = true, isCRunning = true;
 	bool isRunning = isARunning || isBRunning|| isCRunning;                                     //The Data Hub is Running as long as one Probe is still running
 
 	while(isRunning){
@@ -50,7 +52,7 @@ int main()
             isARunning = false;
         }else if (msg.mtype = 35){                                                              //The only message with mtype = 35 is an acknowledgment to Probe A
             msg.mtype = 35;
-            strncpy(msg.greeting, "DATAHUB: PROBE A ACKNOWLEDGED");                             //Sends "ACKNOWLEDGED" to Probe A
+            strncpy(msg.greeting, "DATAHUB: PROBE A ACKNOWLEDGED", greetingSize);               //Sends "ACKNOWLEDGED" to Probe A
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //(Debug) Display that DataHub Acknowledged Probe A

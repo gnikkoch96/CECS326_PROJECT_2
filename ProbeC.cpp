@@ -44,13 +44,13 @@ int main(){
 
 
     // Declaring Message Buffer
-	typdef struct buf {
+	struct msgO {
 		long mtype; // required
-		char greeting[50];                                // mesg content
-	}message_buf;
+		char greeting[greetingSize];                                // mesg content
+	};
 
 	//Generating Message Object
-	message_buf msg;
+	msgO msg;
 
 	//Size of Greeting
 	int greetingSize = sizeof(msg) - sizeof(long);
@@ -58,7 +58,7 @@ int main(){
 	//Kill Patch Inclusion
 	msg.mtype = 3;
 	strncpy(msg.greeting, "Probe C Exiting");
-	kill_patch(qid, msg, greetingSize, 10);
+	kill_patch(qid, msg, greetingSize, 3);
 
 	//Probe C Starts off Running
 	bool isRunning = true;

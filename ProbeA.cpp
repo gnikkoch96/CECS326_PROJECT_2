@@ -43,16 +43,16 @@ int main(){
     int qid = msgget(ftok(".",'u'), 0);
 
     // Declaring Message Buffer
-	typdef struct buf {
+	struct msgO {
 		long mtype; // required
 		char greeting[greetingSize];                                // mesg content
-	}message_buf;
+	};
+
+	//Generating Message Object
+	msgO msg;
 
 	//Size of Greeting
 	int greetingSize = sizeof(msg) - sizeof(long);
-
-	//Generating Message Object
-	message_buf msg;
 
 	//Used to Determine if Probe A has been Acknowledge by the DataHub
     bool isAcknowledge = true;
@@ -71,7 +71,7 @@ int main(){
 
             //Send Signal to Message Queue of Probe A Termination
             msg.mtype = 1;
-            strncpy(msg.greeting, "A_EXIT");                         //When this message is sent, we will look through message in DataHub for this String to Close A
+            strncpy(msg.greeting, "A_EXIT", greetingSize);          //When this message is sent, we will look through message in DataHub for this String to Close A
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //Probe A Shuts Down
@@ -86,7 +86,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greeting, "Probe A: Hi " + to_string(chooseOne));     //Sends "Hi 192/193"
+            strncpy(msg.greeting, "Probe A: Hi " + to_string(chooseOne, greetingSize));     //Sends "Hi 192/193"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
