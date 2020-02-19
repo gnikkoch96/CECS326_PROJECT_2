@@ -7,7 +7,6 @@
 #include <sys/wait.h>
 #include <cstdlib>
 #include <string>
-#include "kill_patch.h"
 
 using namespace std;
 
@@ -28,6 +27,9 @@ class C_Messages{
         static int message_count;
 };
 
+    //Initializing C_Message Message_Count
+	C_Messages::message_count = 0;
+
 int main(){
     //Used to Generate Random Numbers
     srand(time(NULL));
@@ -47,11 +49,6 @@ int main(){
 
 	//Generating Message Object
 	msgO msg;
-
-    //Initializing C_Message Message_Count
-	C_Messages cObj;
-	cObj.message_count = 0;
-
 
 	//Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);
@@ -83,7 +80,7 @@ int main(){
             cout << getpid() << "(Probe C): Sent Message" << endl;
 
             //Increment Message_Count
-            ++cObj.message_count;
+            ++C_Messages::message_count;
         }
 
 

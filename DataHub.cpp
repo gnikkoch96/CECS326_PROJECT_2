@@ -1,5 +1,5 @@
 #include <sys/types.h>
-#include <sys/ipc.h>
+                                                     #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <cstring>
 #include <iostream>
@@ -41,16 +41,17 @@ int main()
         //Always Running Until all Probes Terminate
 
         //DataHub Receives Top Message
+        //(ISSUE): Isn't this supposed to prevent the while loop from continuing...why is still going?
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 0, 0);
 
         //Check Termination of Probe A
-        if(msg.mtype = 1){                                                                      //The only message with mtype = 1 is a termination message from Probe A
+        if(msg.mtype == 1){                                                                      //The only message with mtype = 1 is a termination message from Probe A
             //(Debug) Probe A Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe A Disconnected" << endl;
 
             //Probe A Stops Running
             isARunning = false;
-        }else if (msg.mtype = 35){                                                              //The only message with mtype = 35 is an acknowledgment to Probe A
+        }else if(msg.mtype == 192 || msg.mtype == 193){                                          //Messages Sent from Probe A will either be mtype = 192(B) or 193(C)
             msg.mtype = 35;
             strncpy(msg.greetings, "DATAHUB: PROBE A ACKNOWLEDGED", greetingSize);               //Sends "ACKNOWLEDGED" to Probe A
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
@@ -60,7 +61,7 @@ int main()
         }
 
         //Check Termination of Probe B
-        if(msg.mtype = 2){                                                                      //The only message with mtype = 2 is a termination message from Probe B
+        if(msg.mtype == 2){                                                                      //The only message with mtype = 2 is a termination message from Probe B
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe B Disconnected" << endl;
 
@@ -69,7 +70,7 @@ int main()
         }
 
         //Terminate Probe C Conditions
-        if(msg.mtype = 3){                                                                      //The only message with mtype = 3 is a termination message from Probe C
+        if(msg.mtype == 3){                                                                      //The only message with mtype = 3 is a termination message from Probe C
              //(Debug) Probe C Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe C Disconnected" << endl;
 

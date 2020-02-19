@@ -26,6 +26,8 @@ class A_Messages{
         static int message_count;
 };
 
+	//Initializing A_Message Message_Count
+	int A_Messages::message_count = 0;
 
 
 int main(){
@@ -47,15 +49,15 @@ int main(){
 	//Generating Message Object
 	msgO msg;
 
-	//Initializing A_Message Message_Count
-	A_Messages aObj;
-	aObj.message_count = 0;
 
 	//Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);
 
 	//Used to Determine if Probe A has been Acknowledge by the DataHub
     bool isAcknowledge = true;
+
+    //Used to Check if a Valid Reading was done, this is used for the Acknowledgment part
+    bool validMessage = false;
 
 	//Probe A Starts off Running
 	bool isRunning = true;
@@ -86,7 +88,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe A: Hi " + to_string(chooseOne));     //Sends "Hi 192/193"
+            strncpy(msg.greetings, "Probe A: Hi " + to_string(chooseOne), greetingSize);     //Sends "Hi 192/193"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
@@ -98,16 +100,25 @@ int main(){
             isAcknowledge = false;
 
             //Count the Messages Being sent from Probe A to DataHub
-            aObj.message_count++;
+            A_Messages::message_count++;
+
+            //Changes Valid Message to True
+            validMessage = true;
 
         }
 
-        //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 35)
-        msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 35, 0);
+        if(validMessage){
+            //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 35)
+            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 35, 0);
 
-        //Display to Console that Probe A Message has been acknowledge
-        cout << getpid() << "Probe A: Received Acknowledgment from Data Hub" << endl;
-        isAcknowledge = true;
+            //Display to Console that Probe A Message has been acknowledge
+            cout << getpid() << "Probe A: Received Acknowledgment from Data Hub" << endl;
+            isAcknowledge = true;
+
+            //Change Valid Message to False to go through cycle again
+            validMessage = false;
+        }
+
 
 	}
 
