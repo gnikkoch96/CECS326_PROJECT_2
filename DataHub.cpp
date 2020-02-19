@@ -41,7 +41,7 @@ int main()
         //Always Running Until all Probes Terminate
 
         //DataHub Receives Top Message
-        //(ISSUE): Isn't this supposed to prevent the while loop from continuing...why is still going?
+        //(ISSUE): Isn't this supposed to prevent the while loop from continuing...why is still going? Maybe a memory leak somewhere in the code
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 0, 0);
 
         //Check Termination of Probe A

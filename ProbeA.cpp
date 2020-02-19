@@ -88,7 +88,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe A: Hi " + to_string(chooseOne), greetingSize);     //Sends "Hi 192/193"
+            strncpy(msg.greetings, "Probe A: Hi", greetingSize);     //Sends "Hi 192/193"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
