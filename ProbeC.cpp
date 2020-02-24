@@ -14,8 +14,6 @@ using namespace std;
     1. User has to use a kill command on a terminal to cancel Probe
     Note: Kill_Patch is provided by the Professor
 
-    2. mtype value for A: 45, B:93
-    3. mtype value for DataHub: 03, to let the DataHub know ProbeC is terminated
 */
 
 class C_Messages{
@@ -29,6 +27,7 @@ class C_Messages{
 
     //Initializing C_Message Message_Count
 	C_Messages::message_count = 0;
+
 
 int main(){
     //Used to Generate Random Numbers
@@ -66,8 +65,8 @@ int main(){
 
         //Valid Reading
 		if(randomNum % magic_seed_rho == 0){                   		//Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
-            //Generate and store mtype of either 45 or 93
-            int chooseOne = (rand() > RAND_MAX/2) ? 45:93;
+            //Generate and store mtype of either 191(A) or 192(C)
+            int chooseOne = (rand() > RAND_MAX/2) ? 191:192;
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg

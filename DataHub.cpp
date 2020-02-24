@@ -1,5 +1,5 @@
 #include <sys/types.h>
-                                                     #include <sys/ipc.h>
+#include <sys/ipc.h>
 #include <sys/msg.h>
 #include <cstring>
 #include <iostream>
@@ -16,6 +16,8 @@ using namespace std;
 
 int main()
 {
+    srand(time(NULL));
+
 	// create my msgQ with key value from ftok()
 	int qid = msgget(ftok(".",'u'), IPC_EXCL|IPC_CREAT|0600);
 
@@ -40,9 +42,12 @@ int main()
 	while(isRunning){
         //Always Running Until all Probes Terminate
 
-        //DataHub Receives Top Message
-        //(ISSUE): Isn't this supposed to prevent the while loop from continuing...why is still going? Maybe a memory leak somewhere in the code
-        msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 0, 0);
+        int chooseOne = rand() % 3 + 191;                                                       //Generates a number between 191 - 193
+        if(chooseOne == 192 || chooseOne == 193){
+            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, chooseOne, 0);
+        }else{
+             msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 0, 0);
+        }
 
         //Check Termination of Probe A
         if(msg.mtype == 1){                                                                      //The only message with mtype = 1 is a termination message from Probe A

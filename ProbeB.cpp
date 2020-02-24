@@ -17,9 +17,6 @@ using namespace std;
        reaches 10,000 messages
     Note: Use force_patch to force Probe B out of the DataHub (i.e. it terminates its
           its signal from the message queue
-
-    2. mtype values for A: 103, C:102
-    3. mtype for DataHub: 02 to let the DataHub know to terminate Probe B
 */
 
 int main(){
@@ -71,8 +68,8 @@ int main(){
 
         //Valid Reading
         else if(randomNum % magic_seed_beta == 0){                   //Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
-            //Generate and store mtype of either 102 or 103
-            int chooseOne = (rand() > RAND_MAX/2) ? 102:103;
+            //Generate and store mtype of either 191(A) or 193(C)
+            int chooseOne = (rand() > RAND_MAX/2) ? 191:193;
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
