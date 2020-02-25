@@ -2,7 +2,7 @@
 #define A_C_MESSAGE_COUNTS_H_INCLUDED
 
 class Global_Message_Count{
-    //This class will be used to calculate the # of messages sent from Probe A
+    //This class will be used to calculate the # of messages sent from Probe A and C
     //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
 
     public:
