@@ -7,8 +7,7 @@
 #include <sys/wait.h>
 #include <cstdlib>
 #include <string>
-#include "ProbeA.cpp"
-#include "ProbeC.cpp"
+#include "A_C_Message_Counts.h"
 
 using namespace std;
 
@@ -58,7 +57,7 @@ int main(){
 
             //Send Signal to Message Queue of Probe A Termination
             msg.mtype = 1;
-            strncpy(msg.greeting, "B_EXIT");                         //When this message is sent, we will look through message in DataHub for this String to Close B
+            strncpy(msg.greetings, "B_EXIT");                         //When this message is sent, we will look through message in DataHub for this String to Close B
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //Probe B Shuts Down

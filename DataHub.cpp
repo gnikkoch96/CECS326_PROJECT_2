@@ -45,14 +45,14 @@ int main()
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 1, 0);
 
         //Check Termination of Probe A
-        if(!strcmp(&msg.greetings, "A_EXIT"))){
+        if(!strcmp(msg.greetings, "A_EXIT")){
             //(Debug) Probe A Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe A Disconnected" << endl;
 
             //Probe A Stops Running
             isARunning = false;
 
-        }else if(!strcmp(&msg.greetings, "A_EXIT"))){                                           //Messages Sent from Probe A will have this message in their greetings
+        }else if(!strcmp(msg.greetings, "Probe A: Hi")){                                          //Messages Sent from Probe A will have this message in their greetings
             msg.mtype = 191;
             strncpy(msg.greetings, "DATAHUB: PROBE A ACKNOWLEDGED", greetingSize);               //Sends "ACKNOWLEDGED" to Probe A
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
@@ -62,7 +62,7 @@ int main()
         }
 
         //Check Termination of Probe B
-        if(!strcmp(&msg.greetings, "B_EXIT")){                                                   //Messages Sent from Probe B will have this message in their greetings
+        if(!strcmp(msg.greetings, "B_EXIT")){                                                   //Messages Sent from Probe B will have this message in their greetings
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe B Disconnected" << endl;
 
@@ -71,7 +71,7 @@ int main()
         }
 
         //Terminate Probe C Conditions
-        if(!strcmp(&msg.greetings, "C_EXIT")){                                                   //Messages Sent from Probe C will have this message in their greetings
+        if(!strcmp(msg.greetings, "C_EXIT")){                                                   //Messages Sent from Probe C will have this message in their greetings
              //(Debug) Probe C Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe C Disconnected" << endl;
 

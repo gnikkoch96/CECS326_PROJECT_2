@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <cstdlib>
 #include <string>
+#include "A_C_Message_Counts.h"
 
 using namespace std;
 
@@ -15,18 +16,18 @@ using namespace std;
     Note: Kill_Patch is provided by the Professor
 
 */
-
-class C_Messages{
-    //This class will be used to calculate the # of messages sent from Probe A
-    //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
-
-    public:
-       	//Probe B Terminate Variable (Counts the # of Messages Sent
-        static int message_count;
-};
+//
+//class C_Messages{
+//    //This class will be used to calculate the # of messages sent from Probe A
+//    //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
+//
+//    public:
+//       	//Probe B Terminate Variable (Counts the # of Messages Sent
+//        static int message_count;
+//};
 
     //Initializing C_Message Message_Count
-	C_Messages::message_count = 0;
+	int C_Messages::message_count = 0;
 
 
 int main(){

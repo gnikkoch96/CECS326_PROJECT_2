@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <cstdlib>
 #include <string>
+#include "A_C_Message_Counts.h"
 
 using namespace std;
 
@@ -17,14 +18,14 @@ using namespace std;
     4. mtype to send to the Hub Directly: 1. We strictly use these to either get acknowledge or get terminated. (Messages to send to the hub directly)
 */
 
-class A_Messages{
-    //This class will be used to calculate the # of messages sent from Probe A
-    //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
-
-    public:
-       	//Probe B Terminate Variable (Counts the # of Messages Sent
-        static int message_count;
-};
+//class A_Messages{
+//    //This class will be used to calculate the # of messages sent from Probe A
+//    //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
+//
+//    public:
+//       	//Probe B Terminate Variable (Counts the # of Messages Sent
+//        static int message_count;
+//};
 
 	//Initializing A_Message Message_Count
 	int A_Messages::message_count = 0;
@@ -113,7 +114,7 @@ int main(){
                 //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 191)
                 msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 191, 0);
 
-            }while(strcmp(&msg.greetings,"DATAHUB: PROBE A ACKNOWLEDGED"));                                     //While it isn't the message we are looking for, keep receiving until you get it
+            }while(strcmp(msg.greetings,"DATAHUB: PROBE A ACKNOWLEDGED"));                                     //While it isn't the message we are looking for, keep receiving until you get it
 
 
             //Display to Console that Probe A Message has been acknowledge
