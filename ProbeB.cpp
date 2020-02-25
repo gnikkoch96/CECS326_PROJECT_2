@@ -50,7 +50,7 @@ int main(){
         int randomNum = rand();
 
         //Terminate Condition
-        if((message_count + A_Messages.getTotalMessageSent() + C_Messages.getTotalMessageSent()) >= 10000){
+        if((message_count + Global_Message_Count::cmessage_count + Global_Message_Count::amessage_count) >= 10000){
             //Display Probe B Termination
             cout << "Probe B Termination Condition Met: " << message_count << endl;
             cout << "Probe B is Now Exiting" << endl;

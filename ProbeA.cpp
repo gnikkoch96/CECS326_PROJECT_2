@@ -18,17 +18,8 @@ using namespace std;
     4. mtype to send to the Hub Directly: 1. We strictly use these to either get acknowledge or get terminated. (Messages to send to the hub directly)
 */
 
-//class A_Messages{
-//    //This class will be used to calculate the # of messages sent from Probe A
-//    //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
-//
-//    public:
-//       	//Probe B Terminate Variable (Counts the # of Messages Sent
-//        static int message_count;
-//};
-
 	//Initializing A_Message Message_Count
-	int A_Messages::message_count = 0;
+	int Global_Message_Count::amessage_count = 0;
 
 
 int main(){
@@ -101,7 +92,7 @@ int main(){
             isAcknowledge = false;
 
             //Count the Messages Being sent from Probe A to DataHub
-            A_Messages::message_count++;
+            ++Global_Message_Count::amessage_count;
 
             //Changes Valid Message to True
             validMessage = true;

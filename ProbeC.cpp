@@ -16,18 +16,10 @@ using namespace std;
     Note: Kill_Patch is provided by the Professor
 
 */
-//
-//class C_Messages{
-//    //This class will be used to calculate the # of messages sent from Probe A
-//    //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
-//
-//    public:
-//       	//Probe B Terminate Variable (Counts the # of Messages Sent
-//        static int message_count;
-//};
+
 
     //Initializing C_Message Message_Count
-	int C_Messages::message_count = 0;
+    int Global_Message_Count::cmessage_count = 0;
 
 
 int main(){
@@ -79,7 +71,7 @@ int main(){
             cout << getpid() << "(Probe C): Sent Message" << endl;
 
             //Increment Message_Count
-            ++C_Messages::message_count;
+            ++Global_Message_Count::cmessage_count;
         }
 
 
