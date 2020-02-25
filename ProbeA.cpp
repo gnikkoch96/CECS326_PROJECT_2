@@ -13,12 +13,11 @@ using namespace std;
 
 /* Probe A:
     1. Terminates if Random Number Generated < 50
-    2. Awaits for DataHub Signal before being able to send another message (mtype for DataHub -> 35)
-    3. mtype values for B: 192 and C: 193, so this means whenever we are recieving we will know that mtypes of 192 will be from B and 193 will be from C
-    4. mtype to send to the Hub Directly: 1. We strictly use these to either get acknowledge or get terminated. (Messages to send to the hub directly)
+    2. Awaits for DataHub Signal before being able to send another message (mtype to be received = 191)
+    3. mtype values for B: 192 and C: 193
 */
 
-	//Initializing A_Message Message_Count
+	//Initializing Message Count for Probe A (Used for Probe B's Termination)
 	int Global_Message_Count::amessage_count = 0;
 
 
@@ -105,10 +104,10 @@ int main(){
                 //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 191)
                 msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 191, 0);
 
-            }while(strcmp(msg.greetings,"DATAHUB: PROBE A ACKNOWLEDGED"));                                     //While it isn't the message we are looking for, keep receiving until you get it
+            }while(strcmp(msg.greetings,"DATAHUB: PROBE A ACKNOWLEDGED"));                                     //Checks if the message to be receive is the acknowledgment from DataHub
 
 
-            //Display to Console that Probe A Message has been acknowledge
+            //(Debug) Display to Console that Probe A Message has been acknowledge
             cout << getpid() << "Probe A: Received Acknowledgment from Data Hub" << endl;
             isAcknowledge = true;
 

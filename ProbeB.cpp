@@ -18,6 +18,9 @@ using namespace std;
           its signal from the message queue
 */
 
+int Global_Message_Count::amessage_count = 0;
+int Global_Message_Count::cmessage_count = 0;
+
 int main(){
     //Used to Generate Random Numbers
     srand(time(NULL));
@@ -57,7 +60,7 @@ int main(){
 
             //Send Signal to Message Queue of Probe A Termination
             msg.mtype = 1;
-            strncpy(msg.greetings, "B_EXIT");                         //When this message is sent, we will look through message in DataHub for this String to Close B
+            strncpy(msg.greetings, "B_EXIT", greetingSize);          //When this message is sent, we will look through message in DataHub for this String to Close B
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //Probe B Shuts Down
@@ -71,7 +74,7 @@ int main(){
             msg.mtype = 1;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe B: Hi ");     //Sends "Hi
+            strncpy(msg.greetings, "Probe B: Hi ", greetingSize);    //Sends "Hi
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
