@@ -53,7 +53,7 @@ int main(){
 	int greetingSize = sizeof(msgO) - sizeof(long);
 
 	//Kill Patch Inclusion
-	msg.mtype = 3;
+	msg.mtype = 1;
 	strncpy(msg.greeting, "Probe C Exiting");
 	kill_patch(qid, msg, greetingSize, 3);
 
@@ -70,7 +70,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe C: Hi " + to_string(chooseOne));     //Sends "Hi 45/93"
+            strncpy(msg.greetings, "Probe C: Hi ");                 //Sends "Hi
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);

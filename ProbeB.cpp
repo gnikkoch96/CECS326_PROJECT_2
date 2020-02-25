@@ -57,7 +57,7 @@ int main(){
             cout << "Probe B is Now Exiting" << endl;
 
             //Send Signal to Message Queue of Probe A Termination
-            msg.mtype = 2;
+            msg.mtype = 1;
             strncpy(msg.greeting, "B_EXIT");                         //When this message is sent, we will look through message in DataHub for this String to Close B
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
@@ -73,7 +73,7 @@ int main(){
             msg.mtype = chooseOne;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe B: Hi " + to_string(chooseOne));     //Sends "Hi 102/103"
+            strncpy(msg.greetings, "Probe B: Hi ");     //Sends "Hi
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
