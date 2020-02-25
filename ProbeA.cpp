@@ -83,10 +83,8 @@ int main(){
 
         //Valid Reading
         else if(randomNum % magic_seed_alpha == 0 && isAcknowledge){ //Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
-            //Generate and store mtype of either 192 or 193
-//            int chooseOne = (rand() > RAND_MAX/2) ? 192:193;
-//            msg.mtype = chooseOne;
 
+            //Universal mtype to send to DataHub
             msg.mtype = 1;
 
             //Store Message in Greetings Field of msg
@@ -110,14 +108,12 @@ int main(){
         }
 
         if(validMessage){
-            char *output = NULL;
+
             do{
                 //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 191)
                 msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 191, 0);
 
-                output = strstr(msg.greetings, DATAHUB: PROBE A ACKNOWLEDGED);          //Checks to see if the message has been acknowledge
-
-            }while(!output);
+            }while(strcmp(&msg.greetings,"DATAHUB: PROBE A ACKNOWLEDGED"));                                     //While it isn't the message we are looking for, keep receiving until you get it
 
 
             //Display to Console that Probe A Message has been acknowledge

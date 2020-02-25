@@ -54,8 +54,8 @@ int main(){
 
 	//Kill Patch Inclusion
 	msg.mtype = 1;
-	strncpy(msg.greeting, "Probe C Exiting");
-	kill_patch(qid, msg, greetingSize, 3);
+	strncpy(msg.greeting, "C_EXIT");
+	kill_patch(qid, msg, greetingSize, 1);
 
 	//Probe C Starts off Running
 	bool isRunning = true;
@@ -65,9 +65,8 @@ int main(){
 
         //Valid Reading
 		if(randomNum % magic_seed_rho == 0){                   		//Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
-            //Generate and store mtype of either 191(A) or 192(C)
-            int chooseOne = (rand() > RAND_MAX/2) ? 191:192;
-            msg.mtype = chooseOne;
+            //Universal mtype for DataHub
+            msg.mtype = 1;
 
             //Store Message in Greetings Field of msg
             strncpy(msg.greetings, "Probe C: Hi ");                 //Sends "Hi

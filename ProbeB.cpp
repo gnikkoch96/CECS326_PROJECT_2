@@ -68,9 +68,8 @@ int main(){
 
         //Valid Reading
         else if(randomNum % magic_seed_beta == 0){                   //Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
-            //Generate and store mtype of either 191(A) or 193(C)
-            int chooseOne = (rand() > RAND_MAX/2) ? 191:193;
-            msg.mtype = chooseOne;
+            //Universal mtype for DataHub
+            msg.mtype = 1;
 
             //Store Message in Greetings Field of msg
             strncpy(msg.greetings, "Probe B: Hi ");     //Sends "Hi

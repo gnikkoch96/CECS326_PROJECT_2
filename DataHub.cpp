@@ -39,22 +39,20 @@ int main()
 	bool isARunning = true, isBRunning = true, isCRunning = true;
 	bool isRunning = isARunning || isBRunning|| isCRunning;                                     //The Data Hub is Running as long as one Probe is still running
 
-	while(isRunning){
-        //Always Running Until all Probes Terminate
+	while(isRunning){ //Always Running Until all Probes Terminate
 
         //It will only receive messages with mtype = 1, we will use the greetings field to help distinguish objectives, this will prevent it from trying to get messages sent to the Probes from other probes
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 1, 0);
 
         //Check Termination of Probe A
-        char *output = NULL;
-        if(output = strstr(msg.greetings, "A_EXIT")){
+        if(!strcmp(&msg.greetings, "A_EXIT"))){
             //(Debug) Probe A Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe A Disconnected" << endl;
 
             //Probe A Stops Running
             isARunning = false;
 
-        }else if(output = strstr(msg.greetings, "Probe A: Hi"){                                  //Messages Sent from Probe A will have this message in their greetings
+        }else if(!strcmp(&msg.greetings, "A_EXIT"))){                                           //Messages Sent from Probe A will have this message in their greetings
             msg.mtype = 191;
             strncpy(msg.greetings, "DATAHUB: PROBE A ACKNOWLEDGED", greetingSize);               //Sends "ACKNOWLEDGED" to Probe A
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
@@ -64,7 +62,7 @@ int main()
         }
 
         //Check Termination of Probe B
-        if(output = strstr(msg.greetings, "B_EXIT"){                                             //Messages Sent from Probe B will have this message in their greetings
+        if(!strcmp(&msg.greetings, "B_EXIT")){                                                   //Messages Sent from Probe B will have this message in their greetings
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe B Disconnected" << endl;
 
@@ -73,7 +71,7 @@ int main()
         }
 
         //Terminate Probe C Conditions
-        if(output = strstr(msg.greetings, "Probe C Exiting"){                                     //Messages Sent from Probe C will have this message in their greetings
+        if(!strcmp(&msg.greetings, "C_EXIT")){                                                   //Messages Sent from Probe C will have this message in their greetings
              //(Debug) Probe C Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe C Disconnected" << endl;
 
