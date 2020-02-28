@@ -74,10 +74,13 @@ int main()
         //Check Termination of Probe B
         if(message_count >= 10000){                                                              //Checks if the message_count >= 10000
             //Waiting to Receive Termination Message from Probe B once it checks out that the total messages >= 10000
-            msgrcv(qid, (struct *msgbuf) &msg, 2, 0);
+            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0);
 
             //Force Patch
-            force_patch((pid_t)msg.greetings);
+            string probeBPIDString(msg.greetings);                                                    //Stores a converted copy of greetings as a string
+
+            int probeBPIDInt = stoi(probeBPIDString);                                                 //Converts to int
+            force_patch((pid_t)probeBPID);                                                            //Cast the int as pid_t type for the force patch
 
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe B Disconnected" << endl;
