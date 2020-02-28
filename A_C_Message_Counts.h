@@ -2,13 +2,13 @@
 #define A_C_MESSAGE_COUNTS_H_INCLUDED
 
 class Global_Message_Count{
-    //This class will be used to calculate the # of messages sent from Probe A and C
-    //This value will be accessed in Probe B only as it requires the knowledge of Messages sent for termination
+    //This class will be used to calculate the # of messages sent to the Message Queue from each Probe
+    //Termination of Probe B requires acknowledgment that the total message count >= 10000
 
     public:
-       	//Probe B Terminate Variable (Counts the # of Messages Sent
         static int amessage_count;
         static int cmessage_count;
+        static int bmessage_count;
 };
 
 

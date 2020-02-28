@@ -18,8 +18,10 @@ using namespace std;
           its signal from the message queue
 */
 
+//Initializing Message Count Variables
 int Global_Message_Count::amessage_count = 0;
 int Global_Message_Count::cmessage_count = 0;
+int Global_Message_Count::bmessage_count = 0;
 
 int main(){
     //Used to Generate Random Numbers
@@ -43,9 +45,6 @@ int main(){
     //Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);
 
-    //Initialize Message Count - > Counts the # of Messages that is Sent to Message Queue (Used for testing Probe B Termination)
-    int message_count = 0;
-
 	//Probe B Starts off Running
 	bool isRunning = true;
 	while(isRunning){
@@ -53,17 +52,19 @@ int main(){
         int randomNum = rand();
 
         //Terminate Condition
-        if((message_count + Global_Message_Count::cmessage_count + Global_Message_Count::amessage_count) >= 10000){
+        if((Global_Message_Count::bmessage_count + Global_Message_Count::cmessage_count + Global_Message_Count::amessage_count) >= 10000){
             //Display Probe B Termination
-            cout << "Probe B Termination Condition Met: " << message_count << endl;
+            cout << "Probe B Termination Condition Met" << endl;
             cout << "Probe B is Now Exiting" << endl;
 
             //Send Signal to Message Queue of Probe A Termination
-            msg.mtype = 1;
-            strncpy(msg.greetings, "B_EXIT", greetingSize);          //When this message is sent, we will look through message in DataHub for this String to Close B
+            msg.mtype = 2;
+            strncpy(msg.greetings, to_string(getpid()).c_str, greetingSize);   //Send PID of Probe B for Force Patch (Used in DataHub.cpp)
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
-            //Probe B Shuts Down
+            //Probe B Shuts Down (I think that the Data Hub is supposed to send a signal to Probe B that it has been forced)
+            msgrcv(qid, (struct *msgbuf) &msg, 10, 0);
+
             isRunning = false;
             break;                                                   //Break from the While Loop if Probe B Terminates
         }
@@ -83,7 +84,7 @@ int main(){
             cout << getpid() << "(Probe B) : Sent Message" << endl;
 
             //Increment Message_Count
-            ++message_count;
+            ++Global_Message_Count::bmessage_count;
         }
 
 

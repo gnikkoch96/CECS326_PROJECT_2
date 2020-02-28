@@ -8,6 +8,8 @@
 #include <cstdlib>
 #include <string>
 #include "A_C_Message_Counts.h"
+#include "kill_patch.h"
+
 
 using namespace std;
 

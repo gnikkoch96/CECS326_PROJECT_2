@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <cstdlib>
+#include "A_C_Message_Counts.h"
+#include "force_patch.h"
 
 using namespace std;
 
@@ -14,6 +16,11 @@ using namespace std;
     2. DataHub must acknowledge Probe A messages
     3. Used the data stored in the greetings field to determine conditions
 */
+
+//Initializing Message Count Variables
+int Global_Message_Count::amessage_count = 0;
+int Global_Message_Count::cmessage_count = 0;
+int Global_Message_Count::bmessage_count = 0;
 
 int main()
 {
@@ -35,7 +42,6 @@ int main()
     //Size of Greeting
     int greetingSize = sizeof(msgO) - sizeof(long);
 
-
 	//Queue is Terminated after all Probes Exit the Queue
 	bool isARunning = true, isBRunning = true, isCRunning = true;
 	bool isRunning = isARunning || isBRunning|| isCRunning;
@@ -44,6 +50,9 @@ int main()
 
         //It will only receive messages with mtype = 1, we will use the greetings field to help distinguish objectives, this will prevent it from trying to get messages sent to the Probes from other probes
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 1, 0);
+
+        //Message Count
+        int message_count = Global_Message_Count::amessage_count + Global_Message_Count::bmessage_count + Global_Message_Count::cmessage_count;
 
         //Check Termination of Probe A
         if(!strcmp(msg.greetings, "A_EXIT")){
@@ -63,7 +72,13 @@ int main()
         }
 
         //Check Termination of Probe B
-        if(!strcmp(msg.greetings, "B_EXIT")){                                                   //Checks greetings for Probe B's Terminating Message
+        if(message_count >= 10000){                                                              //Checks if the message_count >= 10000
+            //Waiting to Receive Termination Message from Probe B once it checks out that the total messages >= 10000
+            msgrcv(qid, (struct *msgbuf) &msg, 2, 0);
+
+            //Force Patch
+            force_patch((pid_t)msg.greetings);
+
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe B Disconnected" << endl;
 
@@ -73,6 +88,9 @@ int main()
 
         //Terminate Probe C Conditions
         if(!strcmp(msg.greetings, "C_EXIT")){                                                   //Checks greetings for Probe C's Terminating Message
+
+             //Kill Patch
+
              //(Debug) Probe C Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe C Disconnected" << endl;
 
