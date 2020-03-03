@@ -18,12 +18,15 @@ using namespace std;
 */
 
 //Initializing Message Count Variables
-int Global_Message_Count::amessage_count = 0;
-int Global_Message_Count::cmessage_count = 0;
-int Global_Message_Count::bmessage_count = 0;
+//int Global_Message_Count::amessage_count = 0;
+//int Global_Message_Count::cmessage_count = 0;
+//int Global_Message_Count::bmessage_count = 0;
+
+int message_count;
 
 int main()
 {
+    message_count = 0;
     srand(time(NULL));
 
 	// create my msgQ with key value from ftok()
@@ -50,9 +53,10 @@ int main()
 
         //It will only receive messages with mtype = 1, we will use the greetings field to help distinguish objectives, this will prevent it from trying to get messages sent to the Probes from other probes
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 1, 0);
+        message_count++;
 
         //Message Count
-        int message_count = Global_Message_Count::amessage_count + Global_Message_Count::bmessage_count + Global_Message_Count::cmessage_count;
+//        int message_count = Global_Message_Count::amessage_count + Global_Message_Count::bmessage_count + Global_Message_Count::cmessage_count;
 
         //Check Termination of Probe A
         if(!strcmp(msg.greetings, "A_EXIT")){
@@ -75,6 +79,7 @@ int main()
         if(message_count >= 10000){                                                              //Checks if the message_count >= 10000
             //Waiting to Receive Termination Message from Probe B once it checks out that the total messages >= 10000
             msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0);
+            message_count++;
 
             //Force Patch
             string probeBPIDString(msg.greetings);                                                    //Stores a converted copy of greetings as a string

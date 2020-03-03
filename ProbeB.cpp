@@ -19,9 +19,9 @@ using namespace std;
 */
 
 //Initializing Message Count Variables
-int Global_Message_Count::amessage_count = 0;
-int Global_Message_Count::cmessage_count = 0;
-int Global_Message_Count::bmessage_count = 0;
+//int Global_Message_Count::amessage_count = 0;
+//int Global_Message_Count::cmessage_count = 0;
+//int Global_Message_Count::bmessage_count = 0;
 
 int main(){
     //Used to Generate Random Numbers
@@ -52,7 +52,7 @@ int main(){
         int randomNum = rand();
 
         //Terminate Condition
-        if((Global_Message_Count::bmessage_count + Global_Message_Count::cmessage_count + Global_Message_Count::amessage_count) >= 10000){
+        if(message_count >= 10000){
             //Display Probe B Termination
             cout << "Probe B Termination Condition Met" << endl;
             cout << "Probe B is Now Exiting" << endl;
@@ -64,6 +64,7 @@ int main(){
 
             //Probe B Shuts Down (I think that the Data Hub is supposed to send a signal to Probe B that it has been forced)
             msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 10, 0);
+            message_count++;
 
             isRunning = false;
             break;                                                   //Break from the While Loop if Probe B Terminates
@@ -84,7 +85,7 @@ int main(){
             cout << getpid() << "(Probe B) : Sent Message" << endl;
 
             //Increment Message_Count
-            ++Global_Message_Count::bmessage_count;
+            ++message_count;
         }
 
 

@@ -21,7 +21,7 @@ using namespace std;
 
 
     //Initializing C_Message Message_Count
-    int Global_Message_Count::cmessage_count = 0;
+//    int Global_Message_Count::cmessage_count = 0;
 
 
 int main(){
@@ -73,7 +73,7 @@ int main(){
             cout << getpid() << "(Probe C): Sent Message" << endl;
 
             //Increment Message_Count
-            ++Global_Message_Count::cmessage_count;
+            ++message_count;
         }
 
 	}

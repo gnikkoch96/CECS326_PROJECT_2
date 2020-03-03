@@ -18,7 +18,7 @@ using namespace std;
 */
 
 	//Initializing Message Count for Probe A (Used for Probe B's Termination)
-	int Global_Message_Count::amessage_count = 0;
+//	int Global_Message_Count::amessage_count = 0;
 
 
 int main(){
@@ -91,7 +91,7 @@ int main(){
             isAcknowledge = false;
 
             //Count the Messages Being sent from Probe A to DataHub
-            ++Global_Message_Count::amessage_count;
+//            ++Global_Message_Count::amessage_count;
 
             //Changes Valid Message to True
             validMessage = true;
@@ -103,7 +103,7 @@ int main(){
             do{
                 //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 191)
                 msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 191, 0);
-
+                message_count++;
             }while(strcmp(msg.greetings,"DATAHUB: PROBE A ACKNOWLEDGED"));                                     //Checks if the message to be receive is the acknowledgment from DataHub
 
 
