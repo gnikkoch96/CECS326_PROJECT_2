@@ -17,11 +17,7 @@ using namespace std;
     3. Used the data stored in the greetings field to determine conditions
 */
 
-//Initializing Message Count Variables
-//int Global_Message_Count::amessage_count = 0;
-//int Global_Message_Count::cmessage_count = 0;
-//int Global_Message_Count::bmessage_count = 0;
-
+//Initializing Global Message_Count Variable (From Header File)
 int message_count;
 
 int main()
@@ -51,12 +47,28 @@ int main()
 
 	while(isRunning){ //Always Running Until all Probes Terminate
 
-        //It will only receive messages with mtype = 1, we will use the greetings field to help distinguish objectives, this will prevent it from trying to get messages sent to the Probes from other probes
-        msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 1, 0);
-        message_count++;
+        //Check Termination of Probe B
+        if(message_count == 10000){                                                              //Checks if the message_count >= 10000
+            //Waiting to Receive Termination Message from Probe B once it checks out that the total messages >= 10000
+            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0);
+            message_count++;
 
-        //Message Count
-//        int message_count = Global_Message_Count::amessage_count + Global_Message_Count::bmessage_count + Global_Message_Count::cmessage_count;
+            //Force Patch
+            string probeBPIDString(msg.greetings);                                                    //Stores a converted copy of greetings as a string
+
+            int probeBPIDInt = stoi(probeBPIDString);                                                 //Converts to int
+            force_patch((pid_t)probeBPIDInt);                                                         //Cast the int as pid_t type for the force patch
+
+             //(Debug) Probe B Terminated and is Disconnected from Message Queue
+            cout << getpid() << " : Probe B Disconnected" << endl;
+
+            //Probe B Stops Running
+            isBRunning = false;
+        }else{
+            //It will only receive messages with mtype = 1, we will use the greetings field to help distinguish objectives, this will prevent it from trying to get messages sent to the Probes from other probes
+            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 1, 0);
+            message_count++;
+        }
 
         //Check Termination of Probe A
         if(!strcmp(msg.greetings, "A_EXIT")){
@@ -75,24 +87,7 @@ int main()
             cout << getpid() << " : Acknowledged Probe A's Message" << endl;
         }
 
-        //Check Termination of Probe B
-        if(message_count >= 10000){                                                              //Checks if the message_count >= 10000
-            //Waiting to Receive Termination Message from Probe B once it checks out that the total messages >= 10000
-            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0);
-            message_count++;
 
-            //Force Patch
-            string probeBPIDString(msg.greetings);                                                    //Stores a converted copy of greetings as a string
-
-            int probeBPIDInt = stoi(probeBPIDString);                                                 //Converts to int
-            force_patch((pid_t)probeBPIDInt);                                                         //Cast the int as pid_t type for the force patch
-
-             //(Debug) Probe B Terminated and is Disconnected from Message Queue
-            cout << getpid() << " : Probe B Disconnected" << endl;
-
-            //Probe B Stops Running
-            isBRunning = false;
-        }
 
         //Terminate Probe C Conditions
         if(!strcmp(msg.greetings, "C_EXIT")){                                                   //Checks greetings for Probe C's Terminating Message
@@ -108,7 +103,6 @@ int main()
 	}
 
 	//Destroy Message Queue
-	//(IMPORTANT): Make sure that the Queue is Empty before deleting
     msgctl (qid, IPC_RMID, NULL);
 
     return 0;

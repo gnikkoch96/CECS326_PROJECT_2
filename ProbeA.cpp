@@ -17,8 +17,8 @@ using namespace std;
     3. mtype values for B: 192 and C: 193
 */
 
-	//Initializing Message Count for Probe A (Used for Probe B's Termination)
-//	int Global_Message_Count::amessage_count = 0;
+//Initializing Global Message_Count Variable (From Header File)
+int message_count;
 
 
 int main(){
@@ -90,8 +90,6 @@ int main(){
             //Change isAcknowledge to False to Wait for Signal, to be able to send another message
             isAcknowledge = false;
 
-            //Count the Messages Being sent from Probe A to DataHub
-//            ++Global_Message_Count::amessage_count;
 
             //Changes Valid Message to True
             validMessage = true;

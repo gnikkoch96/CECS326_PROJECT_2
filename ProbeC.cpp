@@ -19,10 +19,8 @@ using namespace std;
 
 */
 
-
-    //Initializing C_Message Message_Count
-//    int Global_Message_Count::cmessage_count = 0;
-
+//Initializing Global Message_Count Variable (From Header File)
+int message_count;
 
 int main(){
     //Used to Generate Random Numbers
@@ -72,8 +70,6 @@ int main(){
             //(Debug) Outputs that Probe C has Sent a Message
             cout << getpid() << "(Probe C): Sent Message" << endl;
 
-            //Increment Message_Count
-            ++message_count;
         }
 
 	}
