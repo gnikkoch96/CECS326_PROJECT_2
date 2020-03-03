@@ -59,11 +59,11 @@ int main(){
 
             //Send Signal to Message Queue of Probe A Termination
             msg.mtype = 2;
-            strncpy(msg.greetings, to_string(getpid()).c_str, greetingSize);   //Send PID of Probe B for Force Patch (Used in DataHub.cpp)
+            strncpy(msg.greetings, to_string(getpid()).c_str(), greetingSize);   //Send PID of Probe B for Force Patch (Used in DataHub.cpp)
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //Probe B Shuts Down (I think that the Data Hub is supposed to send a signal to Probe B that it has been forced)
-            msgrcv(qid, (struct *msgbuf) &msg, 10, 0);
+            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 10, 0);
 
             isRunning = false;
             break;                                                   //Break from the While Loop if Probe B Terminates
@@ -78,7 +78,7 @@ int main(){
             strncpy(msg.greetings, "Probe B: Hi ", greetingSize);    //Sends "Hi
 
             //Sending to Message Queue
-            msgsnd(qid, (struct msgbuf*) msg, greetingSize, 0);
+            msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
 
             //(Debug) Outputs that Probe A has Sent a Message
             cout << getpid() << "(Probe B) : Sent Message" << endl;

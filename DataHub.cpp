@@ -80,7 +80,7 @@ int main()
             string probeBPIDString(msg.greetings);                                                    //Stores a converted copy of greetings as a string
 
             int probeBPIDInt = stoi(probeBPIDString);                                                 //Converts to int
-            force_patch((pid_t)probeBPID);                                                            //Cast the int as pid_t type for the force patch
+            force_patch((pid_t)probeBPIDInt);                                                         //Cast the int as pid_t type for the force patch
 
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe B Disconnected" << endl;

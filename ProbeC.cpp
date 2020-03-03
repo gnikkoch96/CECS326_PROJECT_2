@@ -50,7 +50,7 @@ int main(){
 	//Kill Patch Inclusion
 	msg.mtype = 1;
 	strncpy(msg.greetings, "C_EXIT", greetingSize);
-	kill_patch(qid, msg, greetingSize, 1);
+	kill_patch(qid, (struct msgbuf*) &msg, greetingSize, 1);
 
 	//Probe C Starts off Running
 	bool isRunning = true;
