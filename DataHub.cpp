@@ -48,7 +48,7 @@ int main()
 	while(isRunning){ //Always Running Until all Probes Terminate
 
         //Check Termination of Probe B
-        if(message_count == 10000){//Checks if the message_count >= 10000
+        if(message_count >= 10000){//Checks if the message_count >= 10000
             //Waiting to Receive Termination Message from Probe B once it checks out that the total messages >= 10000
             msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0);
             message_count++;

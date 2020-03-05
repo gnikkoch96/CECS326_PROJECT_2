@@ -50,7 +50,7 @@ int main(){
         int randomNum = rand();
 
         //Terminate Condition
-        if(message_count == 10000){
+        if(message_count >= 10000){
             //Display Probe B Termination
             cout << "Probe B Termination Condition Met" << endl;
             cout << "Probe B is Now Exiting" << endl;
