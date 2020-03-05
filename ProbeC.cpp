@@ -45,7 +45,7 @@ int main(){
 	//Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);
 
-	//Kill Patch Inclusion
+	//Kill Patch
 	msg.mtype = 1;
 	strncpy(msg.greetings, "C_EXIT", greetingSize);
 	kill_patch(qid, (struct msgbuf*) &msg, greetingSize, 1);

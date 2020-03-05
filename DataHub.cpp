@@ -48,7 +48,7 @@ int main()
 	while(isRunning){ //Always Running Until all Probes Terminate
 
         //Check Termination of Probe B
-        if(message_count == 10000){                                                              //Checks if the message_count >= 10000
+        if(message_count == 10000){//Checks if the message_count >= 10000
             //Waiting to Receive Termination Message from Probe B once it checks out that the total messages >= 10000
             msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0);
             message_count++;
@@ -65,7 +65,7 @@ int main()
             //Probe B Stops Running
             isBRunning = false;
         }else{
-            //It will only receive messages with mtype = 1, we will use the greetings field to help distinguish objectives, this will prevent it from trying to get messages sent to the Probes from other probes
+            //It will mainly receive messages with mtype = 1, we will use the greetings field to help distinguish objectives, this will prevent it from trying to get messages sent to the Probes from other probes
             msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 1, 0);
             message_count++;
         }
@@ -92,14 +92,15 @@ int main()
         //Terminate Probe C Conditions
         if(!strcmp(msg.greetings, "C_EXIT")){                                                   //Checks greetings for Probe C's Terminating Message
 
-             //Kill Patch
-
              //(Debug) Probe C Terminated and is Disconnected from Message Queue
             cout << getpid() << " : Probe C Disconnected" << endl;
 
             //Probe C Stops Running
             isCRunning = false;
         }
+
+        //Checks if All Probes are still running
+        isRunning = isARunning || isBRunning|| isCRunning;
 	}
 
 	//Destroy Message Queue
