@@ -7,7 +7,6 @@
 #include <sys/wait.h>
 #include <cstdlib>
 #include <string>
-#include "A_C_Message_Counts.h"
 #include "kill_patch.h"
 
 
@@ -18,9 +17,6 @@ using namespace std;
     Note: Kill_Patch is provided by the Professor
 
 */
-
-//Initializing Global Message_Count Variable (From Header File)
-int message_count;
 
 int main(){
     //Used to Generate Random Numbers

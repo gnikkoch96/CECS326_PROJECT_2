@@ -7,7 +7,6 @@
 #include <sys/wait.h>
 #include <cstdlib>
 #include <string>
-#include "A_C_Message_Counts.h"
 
 using namespace std;
 
@@ -16,10 +15,6 @@ using namespace std;
     2. Awaits for DataHub Signal before being able to send another message (mtype to be received = 191)
     3. mtype values for B: 192 and C: 193
 */
-
-//Initializing Global Message_Count Variable (From Header File)
-int message_count;
-
 
 int main(){
     //Used to Generate Random Numbers
@@ -85,7 +80,7 @@ int main(){
             msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
 
             //(Debug) Outputs that Probe A has Sent a Message
-            cout << getpid() << "Probe A: Sent Message" << endl;
+            cout << getpid() << "(A): Sent Message" << endl;
 
             //Change isAcknowledge to False to Wait for Signal, to be able to send another message
             isAcknowledge = false;
@@ -106,7 +101,7 @@ int main(){
 
 
             //(Debug) Display to Console that Probe A Message has been acknowledge
-            cout << getpid() << "Probe A: Received Acknowledgment from Data Hub" << endl;
+            cout << getpid() << "(A): Received Acknowledgment from Data Hub" << endl;
             isAcknowledge = true;
 
             //Change Valid Message to False to go through cycle again
