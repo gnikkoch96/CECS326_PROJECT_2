@@ -51,7 +51,10 @@ int main()
 
         //Wait to receive ProbeB's ID
         if(!receivedBID){
-            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0)
+            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0);
+
+            int probeBPIDInt = atoi(msg.greetings);                                               //Converts to int
+            probeBID = (pid_t) probeBPIDInt;
             receivedBID = true;
         }
 
@@ -79,11 +82,10 @@ int main()
         }
 
         //Check Termination of Probe B
-        if(message_count >= 10000){//Checks if the message_count >= 10000
+        if(message_count >= 10000 && isBRunning){//Checks if the message_count >= 10000
 
             //Force Patch
-            int probeBPIDInt = atoi(msg.greetings);                                               //Converts to int
-            force_patch((pid_t)probeBPIDInt);                                                     //Cast the int as pid_t type for the force patch
+            force_patch((probeBID);
 
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << "(DH): Probe B Disconnected" << endl;

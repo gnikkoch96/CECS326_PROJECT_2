@@ -96,7 +96,6 @@ int main(){
             do{
                 //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 191)
                 msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 191, 0);
-                message_count++;
             }while(strcmp(msg.greetings,"DATAHUB: PROBE A ACKNOWLEDGED"));                                     //Checks if the message to be receive is the acknowledgment from DataHub
 
 

@@ -64,7 +64,7 @@ int main(){
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //(Debug) Outputs that Probe C has Sent a Message
-            cout << getpid() << "(Probe C): Sent Message" << endl;
+            cout << getpid() << "(C): Sent Message" << endl;
 
         }
 
