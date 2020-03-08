@@ -11,18 +11,13 @@
 using namespace std;
 
 /*
+    DataHub:
     1. DataHub receives messages from Probe A, B, and C.
     2. DataHub must acknowledge Probe A messages
-    3. Used the data stored in the greetings field to determine conditions
 */
-
-
 
 int main()
 {
-    int message_count = 0;
-    srand(time(NULL));
-
 	// create my msgQ with key value from ftok()
 	int qid = msgget(ftok(".",'u'), IPC_EXCL|IPC_CREAT|0600);
 
@@ -35,6 +30,9 @@ int main()
 
 	//Generating message object
 	msgO msg;
+
+    //Initialize Message_Count Variable (Used for Probe B Termination)
+    int message_count = 0;
 
     //Size of Greeting
     int greetingSize = sizeof(msgO) - sizeof(long);
@@ -85,7 +83,7 @@ int main()
         if(message_count >= 10000 && isBRunning){//Checks if the message_count >= 10000
 
             //Force Patch
-            force_patch((probeBID);
+            force_patch(probeBID);
 
              //(Debug) Probe B Terminated and is Disconnected from Message Queue
             cout << getpid() << "(DH): Probe B Disconnected" << endl;

@@ -13,7 +13,6 @@ using namespace std;
 /* Probe A:
     1. Terminates if Random Number Generated < 50
     2. Awaits for DataHub Signal before being able to send another message (mtype to be received = 191)
-    3. mtype values for B: 192 and C: 193
 */
 
 int main(){
@@ -34,7 +33,6 @@ int main(){
 
 	//Generating Message Object
 	msgO msg;
-
 
 	//Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);
@@ -94,7 +92,7 @@ int main(){
         if(validMessage){
 
             do{
-                //Waiting for Acknowledgment from DataHub (mtype messages received from DataHub will be 191)
+                //Wait for Acknowledgment from DataHub (mtype messages received from DataHub will be 191)
                 msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 191, 0);
             }while(strcmp(msg.greetings,"DATAHUB: PROBE A ACKNOWLEDGED"));                                     //Checks if the message to be receive is the acknowledgment from DataHub
 

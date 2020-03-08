@@ -71,9 +71,10 @@ int main(){
 
             first = true;
         }
-
-
 	}
+
+	//(Debug) Terminate Probe B
+	cout << getpid() << "(B): Probe B Terminated" << endl;
 
     return 0;
 }
