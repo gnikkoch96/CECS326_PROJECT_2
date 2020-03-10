@@ -40,10 +40,6 @@ int main(){
     //Size of Greeting
 	int greetingSize = sizeof(msgO) - sizeof(long);
 
-
-	//First Message:
-    bool first = false;
-
 	//Probe B Starts off Running
 	bool isRunning = true;
 	while(isRunning){
@@ -51,12 +47,13 @@ int main(){
         int randomNum = rand();
 
         //Valid Reading
-        if(randomNum % magic_seed_beta == 0 && first){                              //Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
+        if(randomNum % magic_seed_beta == 0){                                       //Valid Reads Occur when the Random Number is Divisible by the Probe's Magic Seed
             //Universal mtype for DataHub
             msg.mtype = 1;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe B: Hi ", greetingSize);                   //Sends "Hi
+            string bmessage = "ProbeB: " + to_string(getpid()) + " and " + to_string(randomNum);        //Stores "ProbeB: PIDX and Random Number"
+            strncpy(msg.greetings, bmessage.c_str(), greetingSize);
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
@@ -64,13 +61,6 @@ int main(){
             //(Debug) Outputs that Probe A has Sent a Message
             cout << getpid() << "(B): Sent Message" << endl;
 
-        }else if(!first){                                                           //First Message of Probe B will be its PID
-            msg.mtype = 2;
-            string bmessage = "ProbeB: " + to_string(getpid()) + " and " + to_string(randomNum);
-            strncpy(msg.greetings, bmessage.c_str, greetingSize);      //Send PID of Probe B for Force Patch (Used in DataHub.cpp)
-            msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
-
-            first = true;
         }
 	}
 

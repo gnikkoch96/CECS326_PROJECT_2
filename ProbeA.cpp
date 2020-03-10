@@ -73,7 +73,7 @@ int main(){
 
             //Store Message in Greetings Field of msg
             string amessage = "ProbeA: " + to_string(getpid()) + " and " + to_string(randomNum);
-            strncpy(msg.greetings, amessage.c_str, greetingSize);     //Sends "Hi"
+            strncpy(msg.greetings, amessage.c_str(), greetingSize);     //Sends "Hi"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);
