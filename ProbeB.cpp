@@ -66,7 +66,8 @@ int main(){
 
         }else if(!first){                                                           //First Message of Probe B will be its PID
             msg.mtype = 2;
-            strncpy(msg.greetings, to_string(getpid()).c_str(), greetingSize);      //Send PID of Probe B for Force Patch (Used in DataHub.cpp)
+            string bmessage = "ProbeB: " + to_string(getpid()) + " and " + to_string(randomNum);
+            strncpy(msg.greetings, bmessage.c_str, greetingSize);      //Send PID of Probe B for Force Patch (Used in DataHub.cpp)
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             first = true;

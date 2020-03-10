@@ -57,7 +57,7 @@ int main(){
 
             //Send Signal to Message Queue of Probe A Termination
             msg.mtype = 1;
-            strncpy(msg.greetings, "A_EXIT", greetingSize);          //When this message is sent, we will look through message in DataHub for this String to Close A
+            strncpy(msg.greetings, "ProbeA: A_EXIT", greetingSize);          //When this message is sent, we will look through message in DataHub for this String to Close A
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
 
             //Probe A Shuts Down
@@ -72,7 +72,8 @@ int main(){
             msg.mtype = 1;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe A: Hi", greetingSize);     //Sends "Hi"
+            string amessage = "ProbeA: " + to_string(getpid()) + " and " + to_string(randomNum);
+            strncpy(msg.greetings, amessage.c_str, greetingSize);     //Sends "Hi"
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*) &msg, greetingSize, 0);

@@ -43,7 +43,7 @@ int main(){
 
 	//Kill Patch
 	msg.mtype = 1;
-	strncpy(msg.greetings, "C_EXIT", greetingSize);
+	strncpy(msg.greetings, "ProbeC: C_EXIT", greetingSize);
 	kill_patch(qid, (struct msgbuf*) &msg, greetingSize, 1);
 
 	//Probe C Starts off Running
@@ -58,7 +58,8 @@ int main(){
             msg.mtype = 1;
 
             //Store Message in Greetings Field of msg
-            strncpy(msg.greetings, "Probe C: Hi ", greetingSize);   //Sends "Hi
+            string cmessage = "ProbeC: " + to_string(getpid()) + " and " + to_string(randomNum);
+            strncpy(msg.greetings, cmessage.c_str, greetingSize);   //Sends "Hi
 
             //Sending to Message Queue
             msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);

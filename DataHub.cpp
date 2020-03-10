@@ -16,6 +16,10 @@ using namespace std;
     2. DataHub must acknowledge Probe A messages
 */
 
+
+//Function Used to distinguish the Probe Messages sent to the DataHub
+bool containsWord(char arr[], string word);
+
 int main()
 {
 	// create my msgQ with key value from ftok()
@@ -42,19 +46,9 @@ int main()
 	bool isRunning = isARunning || isBRunning|| isCRunning;
 
 	//Probe B PID
-	bool receivedBID = false;
 	pid_t probeBID;
 
 	while(isRunning){ //Always Running Until all Probes Terminate
-
-        //Wait to receive ProbeB's ID
-        if(!receivedBID){
-            msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 2, 0);
-
-            int probeBPIDInt = atoi(msg.greetings);                                               //Converts to int
-            probeBID = (pid_t) probeBPIDInt;
-            receivedBID = true;
-        }
 
         //Receive all messages sent to the DataHub
         msgrcv(qid, (struct msgbuf*) &msg, greetingSize, 1, 0);
@@ -62,44 +56,65 @@ int main()
 
 
         //Check Termination of Probe A
-        if(!strcmp(msg.greetings, "A_EXIT")){
-            //(Debug) Probe A Terminated and is Disconnected from Message Queue
-            cout << getpid() << "(DH): Probe A Disconnected" << endl;
+        if(msg.greetings[5] == 'A'){//Means that message is sent from Probe A
+            if(msg.greetings[8] == 'A'){//Terminate A -> ProbeA: A_EXIT
+                //(Debug) Probe A Terminated and is Disconnected from Message Queue
+                cout << getpid() << "(DH): Probe A Disconnected" << endl;
 
-            //Probe A Stops Running
-            isARunning = false;
+                //Probe A Stops Running
+                isARunning = false;
+            }else{//Probe A Sent a Message with its PID and Random Number
+                //Send Acknowledgment
+                msg.mtype = 191;
+                strncpy(msg.greetings, "DATAHUB: PROBE A ACKNOWLEDGED", greetingSize);               //Sends acknowledgment to Probe A
+                msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
+                message_count++;
 
-        }else if(!strcmp(msg.greetings, "Probe A: Hi")){                                         //Checks greetings for Probe A's Message (non-terminating)
-            msg.mtype = 191;
-            strncpy(msg.greetings, "DATAHUB: PROBE A ACKNOWLEDGED", greetingSize);               //Sends acknowledgment to Probe A
-            msgsnd(qid, (struct msgbuf*)&msg, greetingSize, 0);
-            message_count++;
-
-            //(Debug) Display that DataHub Acknowledged Probe A
-            cout << getpid() << "(DH): Acknowledged Probe A's Message" << endl;
+                //(Debug) Display the Message Sent from ProbeA
+                cout << getpid() << ": " << msg.greetings << endl;
+            }
         }
 
+
         //Check Termination of Probe B
-        if(message_count >= 10000 && isBRunning){//Checks if the message_count >= 10000
+        if(msg.greetings[5] == 'B' && isBRunning){//Message was sent from Probe B
+            if(message_count >= 10000){//Checks if the message_count >= 10000
 
-            //Force Patch
-            force_patch(probeBID);
+                //Grab PID
+                string BPID = "";
+                for(int i = 8; i <= 11; i++){
+                   BPID += msg.greetings[i];
+                }
 
-             //(Debug) Probe B Terminated and is Disconnected from Message Queue
-            cout << getpid() << "(DH): Probe B Disconnected" << endl;
+                //Convert BPID to int
+                int probeBPIDInt = stoi(BPID);                                               //Converts to int
+                probeBID = (pid_t) probeBPIDInt;
 
-            //Probe B Stops Running
-            isBRunning = false;
+                //Force Patch
+                force_patch(probeBID);
+
+                 //(Debug) Probe B Terminated and is Disconnected from Message Queue
+                cout << getpid() << "(DH): Probe B Disconnected" << endl;
+
+                //Probe B Stops Running
+                isBRunning = false;
+            }else{
+                cout << getpid() << ": " << msg.greetings << endl;
+            }
         }
 
         //Terminate Probe C Conditions
-        if(!strcmp(msg.greetings, "C_EXIT")){                                                   //Checks greetings for Probe C's Terminating Message
+        if(msg.greetings[5] == 'C'){//Message was sent from Probe C
+            if(msg.greetings[8] == 'C'){ //Checks greetings for Probe C's Terminating Message
 
-             //(Debug) Probe C Terminated and is Disconnected from Message Queue
-            cout << getpid() << "(DH): Probe C Disconnected" << endl;
+                 //(Debug) Probe C Terminated and is Disconnected from Message Queue
+                cout << getpid() << "(DH): Probe C Disconnected" << endl;
 
-            //Probe C Stops Running
-            isCRunning = false;
+                //Probe C Stops Running
+                isCRunning = false;
+            }else{
+                cout << getpid() << ": " << msg.greetings << endl;
+            }
         }
 
         //(Update) Checks if All Probes are still running
@@ -110,4 +125,8 @@ int main()
     msgctl (qid, IPC_RMID, NULL);
 
     return 0;
+}
+
+bool containsWord(char arr[], string word){
+    //Index 5 is the Distinguishable Character
 }
