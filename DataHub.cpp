@@ -109,7 +109,7 @@ int main()
 
                  //(Debug) Probe C Terminated and is Disconnected from Message Queue
                 cout << getpid() << "(DH): Probe C Disconnected" << endl;
-
+		cout << getpid() << "(DH): " << msg.greetings << endl;
                 //Probe C Stops Running
                 isCRunning = false;
             }else{
